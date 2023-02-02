@@ -1,0 +1,19 @@
+.layout {
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6rem !important;
+}
+
+.footer {
+  border-top: 1px solid #001529;
+  text-align: center;
+}
+
+.content {
+  padding: 0 2rem;
+}
