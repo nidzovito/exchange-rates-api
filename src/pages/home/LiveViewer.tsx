@@ -9,13 +9,14 @@ import { fetchLiveData } from 'utils/ratesApi';
 const { Text, Title } = Typography;
 
 function LiveViewer({ base, target }: { base: Currency; target: Currency }) {
-  const [refreshInterval, setRefreshInterval] = useState<number>(1); // in minutes
+  const [refreshInterval, setRefreshInterval] = useState<number>(60); // in minutes
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | undefined>();
+  const [error, setError] = useState<Error | null>(null);
 
   const loadData = useCallback(async () => {
     try {
+      setError(null);
       setLoading(true);
       const result = await fetchLiveData({ base, target });
       setTableData((prev) => [result, ...prev]);
@@ -37,7 +38,7 @@ function LiveViewer({ base, target }: { base: Currency; target: Currency }) {
     }
 
     return () => window.clearInterval(poller);
-  }, [target, refreshInterval, loadData]);
+  }, [base, target, refreshInterval, loadData]);
 
   const columns: ColumnsType<TableDataType> = [
     {
@@ -62,15 +63,19 @@ function LiveViewer({ base, target }: { base: Currency; target: Currency }) {
       </Title>
 
       <Row align="middle" justify="space-between">
-        <Title level={5} style={{ margin: 0 }}>{`1 ${base} equals to`}</Title>
+        <Title level={5} style={{ margin: 0 }}>{`1 ${base}`}</Title>
         <Space>
-          <Text>Refresh Interval: (in minutes)</Text>
-          <InputNumber<number> value={refreshInterval} onChange={(v: any) => setRefreshInterval(v)} size="large" />
+          <InputNumber<number>
+            value={refreshInterval}
+            onChange={(v: any) => setRefreshInterval(v)}
+            size="large"
+            addonBefore="Refresh Interval: (in minutes)"
+          />
         </Space>
       </Row>
 
       <Table
-        rowKey={(record) => record.timestamp}
+        rowKey={row => row.id}
         size="large"
         columns={columns}
         dataSource={tableData}

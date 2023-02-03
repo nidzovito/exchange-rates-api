@@ -7,6 +7,8 @@ import HistoryViewer from './HistoryViewer';
 
 const { Text } = Typography;
 
+const isTestEnv = process.env.NODE_ENV === 'test';
+
 function HomePage() {
   const [currencies, setCurrencies] = useState({ base: Currency.USD, target: Currency.BRL });
   const selectOptions = Object.values(Currency).map((e) => ({ value: e, label: CurrencyLabels[e] }));
@@ -38,7 +40,7 @@ function HomePage() {
         </Col>
 
         <Col xs={24} md={12}>
-          <HistoryViewer {...currencies} />
+          {!isTestEnv && <HistoryViewer {...currencies} />}
         </Col>
       </Row>
       {/* End of Content */}

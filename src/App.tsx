@@ -11,9 +11,7 @@ function App() {
   return (
     <Layout className={styles.layout}>
       <Header className={styles.header}>
-        <Title level={2} style={{ color: '#fff', margin: 0 }}>
-          Currency Converter
-        </Title>
+        <Title level={2}>Currency Converter</Title>
       </Header>
 
       <Content className={styles.content}>

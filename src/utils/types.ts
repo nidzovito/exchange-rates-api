@@ -18,11 +18,13 @@ export enum DateRange {
 }
 
 export type TableDataType = {
+  id: string,
   timestamp: number,
   rate: number,
 }
 
 export type GraphDataType = {
+  id: string,
   date: string,
   rate: number,
 }

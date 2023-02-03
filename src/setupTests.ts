@@ -3,3 +3,17 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+
+jest.mock('@ant-design/plots', () => ({
+  __esModule: true,
+  default: () => { },
+  Line: () => '<Line /> Component Mock'
+}))
+
+window.matchMedia =
+  window.matchMedia ||
+  (() => ({
+    matches: false,
+    addListener: () => null,
+    removeListener: () => null,
+  }))

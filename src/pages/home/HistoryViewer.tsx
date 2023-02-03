@@ -11,12 +11,13 @@ const { Text, Title } = Typography;
 function HistoryViewer({ base, target }: { base: Currency; target: Currency }) {
   const [range, setRange] = useState(DateRange.OneWeek);
   const [graphData, setGraphData] = useState<GraphDataType[]>([]);
-  const [error, setError] = useState<Error | undefined>();
+  const [error, setError] = useState<Error | null>(null);
   const dateRangeOptions = Object.values(DateRange).map((e) => ({ value: e, label: e }));
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        setError(null);
         setGraphData([]);
         const result = await fetchHistoryData({ base, target, range });
         setGraphData(result);

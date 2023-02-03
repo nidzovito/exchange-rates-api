@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 
 import { Currency, DateRange, TableDataType, GraphDataType } from 'utils/types'
+import { uuid } from 'utils/helpers';
 
-const API_BASE = 'https://api.exchangeratesapi.io'
+export const API_BASE = 'https://api.exchangeratesapi.io'
 const API_KEY = process.env.REACT_APP_API_KEY || ''
 const DATE_FORMAT = 'YYYY-MM-DD'
 
@@ -20,11 +21,11 @@ export const fetchLiveData = async ({ target, base }: { target: Currency, base: 
       throw new Error(data.error.info)
     }
     return {
+      id: uuid(),
       timestamp: data.timestamp * 1000,
       rate: data.rates[target]
     };
   } catch (err) {
-    console.error(err);
     throw err;
   }
 }
@@ -37,7 +38,7 @@ export const fetchHistoryData = async ({ target, base, range }: { target: Curren
       symbols: target,
     }
 
-    const numberOfDays = range === DateRange.OneWeek ? 2 : 3
+    const numberOfDays = range === DateRange.OneWeek ? 7 : 14
     const result: GraphDataType[] = [];
 
     for (let i = 0; i < numberOfDays; i++) {
@@ -49,6 +50,7 @@ export const fetchHistoryData = async ({ target, base, range }: { target: Curren
         throw new Error(data.error.info)
       }
       result.push({
+        id: uuid(),
         date,
         rate: data.rates[target],
       })
@@ -56,7 +58,6 @@ export const fetchHistoryData = async ({ target, base, range }: { target: Curren
 
     return result.sort((a, b) => a.date < b.date ? -1 : 1)
   } catch (err) {
-    console.error(err);
     throw err;
   }
 }
